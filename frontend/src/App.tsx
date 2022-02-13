@@ -1,26 +1,52 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import Sample from "./Sample";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+interface Props {}
+
+interface State {
+  message: string;
+  counter1: number;
+}
+
+class App extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      message: "最初のメッセージ",
+      counter1: 0,
+    };
+
+    this.handleClick = this.handleClick.bind(this);
+    this.doAction1 = this.doAction1.bind(this);
+  }
+
+  handleClick() {
+    this.setState({
+      message: "ボタンが押されました",
+    });
+  }
+  doAction1() {
+    this.setState({
+      counter1: this.state.counter1 + 1,
+    });
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <p style={{ color: "pink", fontSize: "30px" }}>Dandyyy</p>
+        <Sample num={"5"} />
+        <Sample num={"6"} />
+        <Sample num={"7"} />
+
+        <p>{this.state.message}</p>
+        <button onClick={this.handleClick}>ボタン</button>
+        <p>{this.state.counter1}</p>
+        <button onClick={this.doAction1}>Click</button>
+      </React.Fragment>
+    );
+  }
 }
 
 export default App;
