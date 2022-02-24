@@ -21,11 +21,36 @@ app.use(bodyParser.json());
 app.use(cors({ origin: /http: \/\/localhost/ }));
 app.options("*", cors());
 
+// sample db
+const db = {
+  test: {
+    user: "test",
+    currency: "$",
+    description: `Test account`,
+    balance: 75,
+    transactions: [
+      { id: "1", date: "2020-10-01", object: "Pocket money", amount: 50 },
+      { id: "2", date: "2020-10-03", object: "Book", amount: -10 },
+      { id: "3", date: "2020-10-04", object: "Sandwich", amount: -5 },
+    ],
+  },
+};
+
 // configure routes
 const router = express.Router();
 router.get("/", (req, res) => {
   // テストとしてpackage.jsonからのデータを表示させる
   res.send(`${package.description} - v${package.version}`);
+});
+
+router.get("/accounts/:user", (req, res) => {
+  const user = req.params.user;
+  const account = db[user];
+
+  if (!account) {
+    return res.status(404).json({ error: "User does not exist" });
+  }
+  return res.json(account);
 });
 
 // register all our routes
