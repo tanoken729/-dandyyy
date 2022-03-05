@@ -53,6 +53,45 @@ router.get("/accounts/:user", (req, res) => {
   return res.json(account);
 });
 
+router.post("/accounts", (req, res) => {
+  const body = req.body;
+  // console.log(body);
+
+  // validate required values
+  if (!body.user || !body.currency) {
+    return res.status(400).json({ error: "user and currency are required" });
+  }
+
+  // check account doesn't exist
+  if (db[body.user]) {
+    return res.status(400).json({ error: "Account already exist" });
+  }
+
+  // balance
+  let balance = body.balance;
+  // balanceはあるけど数字ではない
+  if (balance && typeof balance !== "number") {
+    balance = parseFloat(balance);
+    if (isNaN(balance)) {
+      return res.status(400).json({ error: "balance must be a number" });
+    }
+  }
+
+  // now we can create the account
+  const account = {
+    user: body.user,
+    currency: body.currency,
+    description: body.description || `${body.user}'s account`,
+    balance: balance || 0,
+    transactions: [],
+  };
+
+  // データベースの内部に格納
+  db[account.user] = account;
+
+  return res.status(201).json(account);
+});
+
 // register all our routes
 app.use(apiRoot, router);
 

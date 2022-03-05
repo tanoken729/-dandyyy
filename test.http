@@ -1,0 +1,7 @@
+post http://localhost:5000/api/accounts
+
+{
+  "user": "unko",
+  "currency": "EUR",
+  "balance": 500,
+}
