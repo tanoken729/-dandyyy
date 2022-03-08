@@ -1,20 +1,19 @@
-import { useState } from "react";
-import { ColoredMessage } from "./views/components/ColoredMessage";
+import "./App.css";
+import { useState, useEffect } from "react";
 
-export const App = () => {
-  // stateの定義
-  const [num, setNum] = useState(0);
-
-  const onClickButton = () => {
-    // alert();
-    setNum(num + 1);
-  };
+function App() {
+  const [message, setMessage] = useState("");
+  useEffect(() => {
+    fetch("/api")
+      .then((res) => res.json())
+      .then((data) => setMessage(data.message));
+  }, []);
   return (
-    <>
-      <h1>こんにちは</h1>
-      <ColoredMessage />
-      <button onClick={onClickButton}>ボタン</button>
-      <p>{num}</p>
-    </>
+    <div className="App">
+      <h1>フロントエンド</h1>
+      <p>{message}</p>
+    </div>
   );
-};
+}
+
+export default App;
